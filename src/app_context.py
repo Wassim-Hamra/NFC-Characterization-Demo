@@ -78,15 +78,6 @@ def render_sidebar(df: pl.DataFrame):
         logo_b64 = _svg_to_b64("assets/nxp_logo.svg")
         if logo_b64:
             st.markdown(
-                f'<img src="data:image/svg+xml;base64,{logo_b64}" style="width:115px;margin-bottom:0.6rem;">',
+                f'<img src="data:image/svg+xml;base64,{logo_b64}" style="width:115px;margin-bottom:1.5rem;">',
                 unsafe_allow_html=True,
             )
-        st.markdown(
-            """<div style="font-size:0.75rem;font-weight:700;color:#f0f6fc;letter-spacing:0.02em;margin-bottom:0.15rem;">
-            PL-STI Product Engineering
-            </div>
-            <div style="font-size:0.68rem;color:#8b949e;font-family:ui-monospace,SFMono-Regular,monospace;margin-bottom:1.2rem;">
-            NFC Characterization Lab
-            </div>""",
-            unsafe_allow_html=True,
-        )

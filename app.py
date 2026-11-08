@@ -42,10 +42,7 @@ def main():
     st.markdown("""
         <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #30363d;padding-bottom:0.75rem;margin-bottom:1.25rem;">
             <div>
-                <div style="display:flex;align-items:center;gap:0.6rem;">
-                    <span style="font-size:1.35rem;font-weight:700;letter-spacing:-0.01em;color:#f0f6fc;">NFC Characterization Analytics Platform</span>
-                    <span style="background:#21262d;color:#8b949e;font-size:0.68rem;padding:0.15rem 0.45rem;border-radius:3px;font-family:ui-monospace,SFMono-Regular,monospace;border:1px solid #30363d;">PL-STI / PE-LAB</span>
-                </div>
+                <span style="font-size:1.35rem;font-weight:700;letter-spacing:-0.01em;color:#f0f6fc;">NFC Characterization Analytics Platform</span>
                 <div style="color:#8b949e;font-size:0.8rem;margin-top:0.2rem;">
                     Automated Contactless IC Parametric Characterization &amp; Specification Verification Engine
                 </div>
