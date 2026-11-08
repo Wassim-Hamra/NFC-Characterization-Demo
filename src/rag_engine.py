@@ -25,7 +25,60 @@ os.environ.setdefault("SSL_CERT_FILE", certifi.where())
 
 DOCS_PATH = Path("data/sample_documents")
 
-PRIMARY_MODELS = ["gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-3.8-flash"]
+PRIMARY_MODELS = [
+    "gemini-3.5-flash-lite",
+    "gemini-3.5-flash",
+    "gemini-3.8-flash",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+]
+
+def find_api_key(explicit_key: str | None = None) -> str:
+    """Find Gemini API key across environment, session_state, or Streamlit secrets."""
+    if explicit_key and explicit_key.strip():
+        return explicit_key.strip()
+
+    # 1. Environment variables
+    for var in ["GOOGLE_API_KEY", "GEMINI_API_KEY", "google_api_key", "gemini_api_key"]:
+        val = os.getenv(var, "").strip()
+        if val:
+            return val
+
+    # 2. Streamlit session_state
+    try:
+        import streamlit as st
+        val = str(st.session_state.get("custom_gemini_api_key", "")).strip()
+        if val:
+            return val
+    except Exception:
+        pass
+
+    # 3. Streamlit secrets
+    try:
+        import streamlit as st
+        if hasattr(st, "secrets"):
+            for var in ["GOOGLE_API_KEY", "GEMINI_API_KEY", "google_api_key", "gemini_api_key"]:
+                if var in st.secrets:
+                    val = str(st.secrets[var]).strip()
+                    if val:
+                        return val
+            # Check nested sections
+            for sec in st.secrets:
+                try:
+                    section = st.secrets[sec]
+                    if isinstance(section, dict):
+                        for var in ["GOOGLE_API_KEY", "GEMINI_API_KEY", "google_api_key", "gemini_api_key"]:
+                            if var in section:
+                                val = str(section[var]).strip()
+                                if val:
+                                    return val
+                except Exception:
+                    pass
+    except Exception:
+        pass
+
+    return ""
 
 SYSTEM_PROMPT = """You are an expert NFC semiconductor characterisation engineer assistant.
 Answer the engineer's question using ONLY the provided context passages from the technical documentation.
@@ -160,6 +213,21 @@ def load_documents(docs_path: Path = DOCS_PATH) -> list[Document]:
     return documents
 
 
+def _generate_synthetic_answer(question: str, retrieved: list[SearchResult], extra_context: str = "") -> str:
+    """Fallback grounded synthesis directly from retrieved technical documentation."""
+    lines = [
+        "**Engineering Summary (Synthesized from Technical Reference Index):**\n"
+    ]
+    for i, r in enumerate(retrieved[:3], 1):
+        lines.append(f"{i}. **From *{r.document.title}*:**")
+        lines.append(f"   {r.excerpt.strip()}\n")
+    if extra_context:
+        ctx_lines = [l.strip() for l in extra_context.splitlines() if l.strip()]
+        if ctx_lines:
+            lines.append(f"\n*Investigation Context:* {ctx_lines[0]}")
+    return "\n".join(lines)
+
+
 # ─────────────────────────────────────────────────────────────────
 # RAG Engine
 # ─────────────────────────────────────────────────────────────────
@@ -173,15 +241,11 @@ class RAGEngine:
         self._model_name = PRIMARY_MODELS[0]
         self._init_gemini()
 
-    def _init_gemini(self):
-        api_key = os.getenv("GOOGLE_API_KEY", "").strip()
+    def _init_gemini(self, explicit_key: str | None = None):
+        api_key = find_api_key(explicit_key)
         if not api_key:
-            try:
-                import streamlit as st
-                api_key = str(st.secrets.get("GOOGLE_API_KEY", "")).strip()
-            except Exception:
-                api_key = ""
-        if not api_key:
+            self._gemini_available = False
+            self._gemini_client = None
             return
         try:
             from google import genai
@@ -196,9 +260,12 @@ class RAGEngine:
                 self._gemini_available = True
             except Exception:
                 self._gemini_available = False
+                self._gemini_client = None
 
     @property
     def llm_available(self) -> bool:
+        if not self._gemini_available:
+            self._init_gemini()
         return self._gemini_available
 
     def retrieve(self, question: str, k: int = 3) -> list[SearchResult]:
@@ -219,17 +286,22 @@ class RAGEngine:
             return {
                 "question": question,
                 "retrieved": [],
-                "answer": None,
-                "mode": "retrieval_only",
+                "answer": "No matching passages were found in the reference documentation for this question. Try rephrasing with semiconductor or NFC terms.",
+                "mode": "none",
                 "error": "No relevant passages found in the documentation.",
             }
 
+        # Check if Gemini key is available or can be re-initialized
         if not self._gemini_available:
+            self._init_gemini()
+
+        if not self._gemini_available:
+            synthetic_answer = _generate_synthetic_answer(question, retrieved, extra_context)
             return {
                 "question": question,
                 "retrieved": retrieved,
-                "answer": None,
-                "mode": "retrieval_only",
+                "answer": synthetic_answer,
+                "mode": "retrieval_synthesized",
                 "error": None,
             }
 
@@ -264,16 +336,19 @@ class RAGEngine:
                     "retrieved": retrieved,
                     "answer": answer_text,
                     "mode": "llm",
+                    "model": model_candidate,
                     "error": None,
                 }
             except Exception as e:
                 last_error = str(e)
                 continue
 
+        # Fallback to structured documentation synthesis if all candidate models failed
+        synthetic_answer = _generate_synthetic_answer(question, retrieved, extra_context)
         return {
             "question": question,
             "retrieved": retrieved,
-            "answer": None,
-            "mode": "retrieval_only",
+            "answer": synthetic_answer,
+            "mode": "retrieval_synthesized",
             "error": f"LLM generation unavailable: {last_error[:200] if last_error else 'Unknown error'}",
         }

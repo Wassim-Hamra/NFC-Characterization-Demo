@@ -39,17 +39,33 @@ def render(df: pl.DataFrame, specs: dict):
 
     rag = _get_rag_engine()
 
-    # LLM status badge
+    # LLM status badge & optional key input
     if rag.llm_available:
         st.markdown(
-            f"<span class='badge badge-pass'>● Gemini API connected — LLM answers enabled</span>",
+            "<span class='badge badge-pass'>● Gemini Connected — Live LLM Answers Active</span>",
             unsafe_allow_html=True,
         )
     else:
         st.markdown(
-            f"<span class='badge badge-synth'>● Retrieval-only mode — Set GOOGLE_API_KEY in .env to enable LLM answers</span>",
+            "<span class='badge badge-info'>● Grounded Retrieval Mode Active</span>",
             unsafe_allow_html=True,
         )
+        with st.expander("🔑 Connect Gemini API Key (Optional)", expanded=False):
+            st.markdown(
+                "<span style='color:#9999bb;font-size:0.82rem;'>"
+                "To enable live Gemini AI synthesis, enter your Google API key below or set <code>GOOGLE_API_KEY</code> in Streamlit Secrets."
+                "</span>",
+                unsafe_allow_html=True,
+            )
+            kc1, kc2 = st.columns([3, 1])
+            with kc1:
+                input_k = st.text_input("Gemini API Key", type="password", placeholder="AIzaSy...", label_visibility="collapsed", key="gemini_key_box")
+            with kc2:
+                if st.button("Connect", use_container_width=True, key="btn_save_key"):
+                    if input_k.strip():
+                        st.session_state["custom_gemini_api_key"] = input_k.strip()
+                        rag._init_gemini(input_k.strip())
+                        st.rerun()
 
     st.markdown("<hr style='border-color:#1e1e35;margin:1rem 0;'>", unsafe_allow_html=True)
 
@@ -131,28 +147,48 @@ def _render_context_panel(df: pl.DataFrame, specs: dict):
 
 
 def _render_chat(rag: RAGEngine, df: pl.DataFrame, specs: dict):
+    # Initialize session state for persistent query and result
+    if "ai_question_text" not in st.session_state:
+        st.session_state["ai_question_text"] = ""
+    if "ai_last_result" not in st.session_state:
+        st.session_state["ai_last_result"] = None
+    if "ai_last_question" not in st.session_state:
+        st.session_state["ai_last_question"] = ""
+
     # Example questions
     st.markdown(
-        "<div style='font-size:0.75rem;color:#6666aa;margin-bottom:0.5rem;'>Example questions:</div>",
+        "<div style='font-size:0.75rem;color:#8888aa;margin-bottom:0.5rem;'>Example questions (click to investigate):</div>",
         unsafe_allow_html=True,
     )
+    clicked_question = None
     example_cols = st.columns(2)
     for i, q in enumerate(EXAMPLE_QUESTIONS[:4]):
         with example_cols[i % 2]:
-            if st.button(f"❓ {q[:55]}…" if len(q) > 55 else f"❓ {q}",
-                         key=f"ai_eg_{i}", use_container_width=True):
-                st.session_state["ai_question"] = q
+            btn_label = f"❓ {q[:52]}…" if len(q) > 52 else f"❓ {q}"
+            if st.button(btn_label, key=f"ai_eg_{i}", use_container_width=True):
+                clicked_question = q
 
     st.markdown("<hr style='border-color:#1e1e35;margin:0.8rem 0;'>", unsafe_allow_html=True)
 
-    # Question input
-    question = st.text_area(
-        "Ask a question about NFC characterization:",
-        value=st.session_state.get("ai_question", ""),
-        height=90,
-        placeholder="e.g. What could cause a bimodal load modulation distribution?",
-        key="ai_question_input",
-    )
+    # Trigger investigation if example button clicked
+    trigger_search = False
+    if clicked_question:
+        st.session_state["ai_question_text"] = clicked_question
+        trigger_search = True
+
+    # Question input form
+    with st.form("ai_question_form", clear_on_submit=False):
+        typed_question = st.text_area(
+            "Ask a question about NFC characterization:",
+            value=st.session_state["ai_question_text"],
+            height=85,
+            placeholder="e.g. What could cause a bimodal load modulation distribution?",
+        )
+        ask_btn = st.form_submit_button("🔍 Investigate", use_container_width=True)
+
+    if ask_btn:
+        st.session_state["ai_question_text"] = typed_question
+        trigger_search = True
 
     # Build extra context from selected lot
     extra_ctx = ""
@@ -168,22 +204,31 @@ def _render_chat(rag: RAGEngine, df: pl.DataFrame, specs: dict):
                 f"{finding_lines}"
             )
 
-    ask_btn = st.button("🔍 Investigate", use_container_width=True, key="ai_ask_btn")
+    # Execute search if triggered
+    if trigger_search:
+        q_to_run = st.session_state["ai_question_text"].strip()
+        if q_to_run:
+            with st.spinner("Analyzing technical documents and synthesizing answer…"):
+                st.session_state["ai_last_result"] = rag.answer(q_to_run, extra_context=extra_ctx, k=3)
+                st.session_state["ai_last_question"] = q_to_run
+        else:
+            st.warning("Please enter or select a question to investigate.")
 
-    if ask_btn and question.strip():
-        with st.spinner("Retrieving relevant documentation…"):
-            result = rag.answer(question.strip(), extra_context=extra_ctx, k=3)
+    # Render results if available in session state
+    result = st.session_state.get("ai_last_result")
+    last_q = st.session_state.get("ai_last_question", "")
 
+    if result and last_q:
         # Question bubble
         st.markdown(
-            f"<div class='chat-bubble-user'><strong>Question:</strong> {question.strip()}</div>",
+            f"<div class='chat-bubble-user'><strong>Question:</strong> {last_q}</div>",
             unsafe_allow_html=True,
         )
 
         # Retrieved sources
-        if result["retrieved"]:
+        if result.get("retrieved"):
             st.markdown(
-                "<div style='font-size:0.75rem;color:#6666aa;margin:0.6rem 0 0.3rem;'>"
+                "<div style='font-size:0.75rem;color:#8888aa;margin:0.6rem 0 0.3rem;'>"
                 "📚 Retrieved passages:</div>",
                 unsafe_allow_html=True,
             )
@@ -193,7 +238,7 @@ def _render_chat(rag: RAGEngine, df: pl.DataFrame, specs: dict):
                     expanded=False,
                 ):
                     st.markdown(
-                        f"<div style='font-size:0.82rem;color:#9999bb;'>{r.excerpt}</div>",
+                        f"<div style='font-size:0.82rem;color:#c0c0d8;'>{r.excerpt}</div>",
                         unsafe_allow_html=True,
                     )
                     st.markdown(
@@ -201,46 +246,30 @@ def _render_chat(rag: RAGEngine, df: pl.DataFrame, specs: dict):
                         unsafe_allow_html=True,
                     )
 
-        # Answer
-        if result["mode"] == "llm" and result["answer"]:
+        # Answer rendering
+        ans_text = result.get("answer")
+        mode = result.get("mode")
+
+        if ans_text:
+            if mode == "llm":
+                badge_html = "<div style='font-size:0.75rem;color:#69CA00;margin:0.8rem 0 0.3rem;'>🤖 Gemini Answer (grounded in retrieved documentation):</div>"
+            else:
+                badge_html = "<div style='font-size:0.75rem;color:#0EAFE0;margin:0.8rem 0 0.3rem;'>📖 Technical Synthesis (from retrieved reference documentation):</div>"
+
+            st.markdown(badge_html, unsafe_allow_html=True)
             st.markdown(
-                "<div style='font-size:0.75rem;color:#69CA00;margin:0.8rem 0 0.3rem;'>"
-                "🤖 Gemini answer (grounded in retrieved documentation):</div>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                f"<div class='chat-bubble-ai'>{result['answer']}</div>",
+                f"<div class='chat-bubble-ai'>{ans_text}</div>",
                 unsafe_allow_html=True,
             )
             st.caption(
-                "⚠️ This answer was generated by an LLM using only the retrieved synthetic documentation. "
-                "It does not reflect real NXP specifications. All specification limits in the documentation "
-                "are illustrative only."
+                "📌 Answer grounded strictly in retrieved technical documentation. "
+                "Specification limits and test guides are synthetic illustrative references."
             )
-        elif result["mode"] == "retrieval_only":
-            if result.get("error"):
-                st.warning(f"Retrieval-only mode: {result['error']}")
-            else:
-                st.markdown(
-                    "<div style='font-size:0.75rem;color:#0EAFE0;margin:0.8rem 0 0.3rem;'>"
-                    "📖 Retrieval-only mode — most relevant passages shown above</div>",
-                    unsafe_allow_html=True,
-                )
-                st.info(
-                    "To enable LLM-synthesised answers, add your Gemini API key to the .env file "
-                    "as GOOGLE_API_KEY=<your_key>. The retrieval-only mode shows the most relevant "
-                    "document passages directly without synthesis."
-                )
-
-        # No documents found
-        if not result["retrieved"]:
+        elif not result.get("retrieved"):
             st.warning(
                 "No relevant passages found in the documentation for this question. "
-                "Try rephrasing, or the topic may not be covered by the available documents."
+                "Try rephrasing with semiconductor characterization or NFC terminology."
             )
-
-    elif ask_btn and not question.strip():
-        st.warning("Please enter a question.")
 
     # Technical note
     st.markdown("<hr style='border-color:#1e1e35;margin:1.5rem 0 0.5rem;'>", unsafe_allow_html=True)
