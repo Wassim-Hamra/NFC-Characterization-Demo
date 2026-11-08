@@ -6,7 +6,7 @@ import streamlit as st
 import polars as pl
 import io
 
-from src.data_processor import process, validate_upload_schema
+from src.data_processor import process
 
 NXP_ORANGE = "#FCA600"
 NXP_BLUE   = "#0EAFE0"

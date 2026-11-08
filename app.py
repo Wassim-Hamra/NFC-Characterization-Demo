@@ -341,7 +341,7 @@ Retrieval-Augmented Generation (RAG) accelerates this by:
     st.markdown("## System Architecture")
     st.code(
         """
-Test CSV / Upload
+Characterization Test Data (CSV)
     │
     ▼
 data_generator.py ──── Synthetic dataset (5 000 records, fixed seed=42)

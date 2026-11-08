@@ -93,61 +93,17 @@ def render_sidebar(df: pl.DataFrame):
 
         st.markdown("<hr style='border-color:#1e1e35;margin:0.5rem 0 0.8rem 0;'>", unsafe_allow_html=True)
 
-        # Dataset Status Badge
-        source = st.session_state.get("data_source", "synthetic")
-        if source == "synthetic":
-            st.markdown(
-                "<span class='badge badge-synth'>● Synthetic sample data</span>",
-                unsafe_allow_html=True,
-            )
-        else:
-            st.markdown(
-                "<span class='badge badge-upload'>● Uploaded dataset</span>",
-                unsafe_allow_html=True,
-            )
-
-        n_rows = len(df) if df is not None else 0
+        # Dataset Status
         st.markdown(
-            f"<div style='font-size:0.75rem;color:#8888aa;margin-top:0.3rem;'>{n_rows:,} records active</div>",
+            "<span class='badge badge-synth'>● 5,000 synthetic test records active</span>",
             unsafe_allow_html=True,
         )
 
-        st.markdown("<hr style='border-color:#1e1e35;margin:0.8rem 0;'>", unsafe_allow_html=True)
-
-        # Upload dataset widget
         st.markdown(
-            "<div style='font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;"
-            "color:#6666aa;margin-bottom:0.4rem;'>Upload Custom CSV</div>",
+            f"<div style='font-size:0.75rem;color:#8888aa;margin-top:0.4rem;line-height:1.4;'>"
+            f"5 lots (LOT-A to LOT-E)<br>4 NFC parameters</div>",
             unsafe_allow_html=True,
         )
-        uploaded = st.file_uploader(
-            "Upload CSV",
-            type=["csv"],
-            key="shared_file_uploader",
-            label_visibility="collapsed",
-        )
-
-        if uploaded is not None:
-            try:
-                upload_df = pl.read_csv(uploaded)
-                is_valid, missing = validate_upload_schema(upload_df)
-                if is_valid:
-                    st.session_state["df"] = upload_df
-                    st.session_state["data_source"] = "uploaded"
-                    st.success(f"Loaded {len(upload_df):,} rows")
-                    st.rerun()
-                else:
-                    st.error(
-                        f"Missing columns: {', '.join(missing[:4])}..."
-                    )
-            except Exception as e:
-                st.error(f"Error reading file: {str(e)[:150]}")
-
-        if st.session_state.get("data_source") == "uploaded":
-            if st.button("↺ Restore Synthetic Dataset", key="shared_restore_btn"):
-                st.session_state["df"] = _load_default_data()
-                st.session_state["data_source"] = "synthetic"
-                st.rerun()
 
         st.markdown("<hr style='border-color:#1e1e35;margin:0.8rem 0;'>", unsafe_allow_html=True)
         st.markdown(
