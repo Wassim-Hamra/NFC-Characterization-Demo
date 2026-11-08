@@ -46,8 +46,8 @@ def main():
                 <span style="color:#f0f0ff;"> NFC Characterization Workbench</span>
             </span>
         </div>
-        <p style="color:#6666aa;font-size:0.9rem;margin-top:0;margin-bottom:1.4rem;">
-            Semiconductor Characterization, Process Intelligence &amp; Technical Methodology · Synthetic Educational Prototype
+        <p style="color:#8888aa;font-size:0.92rem;margin-top:0;margin-bottom:1.4rem;">
+            Automated Semiconductor Characterization &amp; Statistical Analysis
         </p>
     """, unsafe_allow_html=True)
 
@@ -239,22 +239,6 @@ def _render_param_hist(df: pl.DataFrame, param: str, specs: dict):
 
 
 def _render_methodology():
-    # Disclaimer
-    st.markdown(
-        f"""<div class='nxp-card nxp-card-orange'>
-        <strong style='color:{NXP_ORANGE};'>⚠️ Disclaimer</strong><br>
-        <span style='color:#c8c8e0;font-size:0.86rem;'>
-        This is an independent educational prototype developed using entirely synthetic data.
-        It is <strong>not affiliated with NXP Semiconductors</strong> and does not use confidential
-        industrial measurements or specifications. All chip IDs, lot IDs, measurement values,
-        and specification limits are artificially generated for demonstration purposes only.
-        NXP, NXP Semiconductors, and associated logos are trademarks of NXP B.V.
-        The NXP visual theme used in this prototype is for educational reference only.
-        </span>
-        </div>""",
-        unsafe_allow_html=True,
-    )
-
     st.markdown("## Motivation & Workflow")
     st.markdown(
         """
@@ -394,6 +378,8 @@ Technical Documentation (*.txt) ──► BM25 Retrieval ──► Google Gemini
 4. **AI Investigation (20s)**: Ask: *"What could cause a bimodal distribution in load modulation?"* Show the Gemini-generated explanation grounded in the retrieved documentation with cited sources.
         """
     )
+    st.markdown("<hr style='border-color:#1e1e35;margin:2rem 0 1rem;'>", unsafe_allow_html=True)
+    st.caption("All datasets, test records, and reference documents in this workbench are synthetic.")
 
 
 if __name__ == "__main__":

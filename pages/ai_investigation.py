@@ -33,7 +33,7 @@ def _get_rag_engine():
 def render(df: pl.DataFrame, specs: dict):
     st.markdown("<div class='page-title'>AI Investigation Assistant</div>", unsafe_allow_html=True)
     st.markdown(
-        "<div class='page-subtitle'>RAG-based technical investigation using synthetic reference documentation</div>",
+        "<div class='page-subtitle'>RAG-assisted root-cause investigation grounded in technical documentation</div>",
         unsafe_allow_html=True,
     )
 
@@ -242,12 +242,11 @@ def _render_chat(rag: RAGEngine, df: pl.DataFrame, specs: dict):
     elif ask_btn and not question.strip():
         st.warning("Please enter a question.")
 
-    # Disclaimer
+    # Technical note
     st.markdown("<hr style='border-color:#1e1e35;margin:1.5rem 0 0.5rem;'>", unsafe_allow_html=True)
     st.caption(
-        "📌 All documents in this index are synthetic educational material. "
-        "They are not real NXP specifications. The assistant will not invent specification limits "
-        "or claim confirmed physical causes without evidence from the documentation."
+        "📌 Answers are synthesized strictly from retrieved technical reference documentation. "
+        "Sources are cited with each response."
     )
 
 
