@@ -48,7 +48,7 @@ def main():
                 </div>
             </div>
             <div style="text-align:right;font-family:ui-monospace,SFMono-Regular,monospace;font-size:0.72rem;color:#8b949e;">
-                <span style="color:#2ea043;">● SYSTEM READY</span> | 13.56 MHz NFC
+                <span style="color:#2ea043;font-weight:600;">SYSTEM READY</span> | 13.56 MHz NFC
             </div>
         </div>
     """, unsafe_allow_html=True)

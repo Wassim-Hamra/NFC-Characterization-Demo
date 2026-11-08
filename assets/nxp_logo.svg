@@ -1,21 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
-  <!-- NXP Logo SVG - Synthetic educational prototype, not official NXP asset -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 55" width="115" height="55">
   <defs>
     <style>
-      .nxp-n { fill: #FCA600; }
-      .nxp-x { fill: #0EAFE0; }
-      .nxp-p { fill: #69CA00; }
-      .nxp-text { font-family: 'Avenir', 'Nunito Sans', 'Arial', sans-serif; font-weight: 800; font-size: 38px; letter-spacing: -1px; }
+      .nxp-n { fill: #ea7600; }
+      .nxp-x { fill: #0096d6; }
+      .nxp-p { fill: #2ea043; }
+      .nxp-text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; font-weight: 800; font-size: 38px; letter-spacing: -1px; }
     </style>
   </defs>
   <!-- N -->
-  <text x="4" y="48" class="nxp-text nxp-n">N</text>
+  <text x="4" y="42" class="nxp-text nxp-n">N</text>
   <!-- X -->
-  <text x="42" y="48" class="nxp-text nxp-x">X</text>
+  <text x="42" y="42" class="nxp-text nxp-x">X</text>
   <!-- P -->
-  <text x="81" y="48" class="nxp-text nxp-p">P</text>
-  <!-- Tagline dots -->
-  <circle cx="122" cy="40" r="3" fill="#FCA600" opacity="0.8"/>
-  <circle cx="132" cy="40" r="3" fill="#0EAFE0" opacity="0.8"/>
-  <circle cx="142" cy="40" r="3" fill="#69CA00" opacity="0.8"/>
+  <text x="81" y="42" class="nxp-text nxp-p">P</text>
 </svg>
