@@ -176,6 +176,12 @@ class RAGEngine:
     def _init_gemini(self):
         api_key = os.getenv("GOOGLE_API_KEY", "").strip()
         if not api_key:
+            try:
+                import streamlit as st
+                api_key = str(st.secrets.get("GOOGLE_API_KEY", "")).strip()
+            except Exception:
+                api_key = ""
+        if not api_key:
             return
         try:
             from google import genai
