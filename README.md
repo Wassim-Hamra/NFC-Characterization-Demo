@@ -1,6 +1,12 @@
 # NFC Characterization Workbench (Demo Prototype)
 ### *A Proof-of-Concept for Automated Semiconductor Test Data Analysis & Technical RAG*
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://nfc-characterization.streamlit.app/)
+&nbsp;
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/Wassim-Hamra/NFC-Characterization-Demo)
+
+> **Live Demo:** **[https://nfc-characterization.streamlit.app/](https://nfc-characterization.streamlit.app/)**
+
 > **Disclaimer:** This is an independent student engineering prototype built with 100% synthetic data. It is not affiliated with NXP Semiconductors, and no confidential or proprietary industrial measurements were used. All measurements, lot IDs, chip IDs, and specifications are generated for demonstration purposes only.
 
 ---
