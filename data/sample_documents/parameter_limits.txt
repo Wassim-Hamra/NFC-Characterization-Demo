@@ -1,0 +1,73 @@
+SYNTHETIC EDUCATIONAL MATERIAL — NOT REAL NXP SPECIFICATIONS
+Document: Illustrative Parameter Limits Reference
+Version: Illustrative v1.0
+
+IMPORTANT DISCLAIMER: The limits in this document are entirely synthetic and illustrative.
+They are NOT drawn from any real NXP product specification. They are created solely for
+educational and demonstration purposes.
+
+─────────────────────────────────────────────
+ILLUSTRATIVE PARAMETER LIMITS TABLE
+─────────────────────────────────────────────
+
+Parameter: Carrier Frequency
+Symbol: f_carrier
+Unit: MHz
+Nominal: 13.56
+LSL (Lower Spec Limit): 13.50
+USL (Upper Spec Limit): 13.62
+Test Condition: Room temperature, nominal supply voltage
+Notes: Deviation from 13.56 MHz causes coupling efficiency loss and potential decode errors
+
+Parameter: Load Modulation Amplitude
+Symbol: V_LM
+Unit: mV
+Nominal: 160
+LSL: 120
+USL: 200
+Test Condition: Standard coupling distance, nominal field strength
+Notes: Below LSL the reader cannot reliably detect the uplink signal
+
+Parameter: Receiver Sensitivity
+Symbol: S_rx
+Unit: dBm
+Nominal: -60
+LSL: -65
+USL: -50
+Test Condition: Reference antenna at standard distance
+Notes: More negative = better sensitivity; USL violation means degraded range performance
+
+Parameter: Modulation Depth
+Symbol: m_ASK
+Unit: %
+Nominal: 10
+LSL: 7
+USL: 14
+Test Condition: Standard test field, nominal modulation index command
+Notes: ISO 14443 specifies the modulation index range for reliable decoding
+
+─────────────────────────────────────────────
+HOW TO READ SPECIFICATION LIMITS
+─────────────────────────────────────────────
+LSL (Lower Specification Limit): The minimum acceptable measurement value. A measurement below the LSL is out of specification.
+
+USL (Upper Specification Limit): The maximum acceptable measurement value. A measurement above the USL is out of specification.
+
+Nominal: The target or ideal value. The process should aim to produce measurements close to the nominal with minimal spread.
+
+Pass/Fail rule: A measurement passes if LSL ≤ measured_value ≤ USL. This is a deterministic binary decision based on measured data and the defined limits. It is not a statistical estimate.
+
+─────────────────────────────────────────────
+PROCESS CAPABILITY INDICES
+─────────────────────────────────────────────
+Cp = (USL - LSL) / (6σ)
+  Measures the potential capability of the process if it were perfectly centred.
+  Cp ≥ 1.33 is typically required for production release.
+
+Cpk = min( (USL - μ)/(3σ), (μ - LSL)/(3σ) )
+  Measures the actual capability, accounting for centring.
+  A low Cpk relative to Cp indicates the process mean is shifted toward one limit.
+
+A systematic shift in a lot can reduce Cpk significantly even when Cp remains acceptable, because the mean has moved toward one of the specification limits.
+
+NOTE: All limits and indices in this document are entirely synthetic and illustrative.

@@ -1,0 +1,53 @@
+SYNTHETIC EDUCATIONAL MATERIAL — NOT REAL NXP SPECIFICATIONS
+Document: Receiver Sensitivity — Characterization Notes
+Version: Illustrative v1.0
+
+─────────────────────────────────────────────
+1. PARAMETER DEFINITION
+─────────────────────────────────────────────
+Receiver sensitivity is the minimum RF input power level at which an NFC tag IC can correctly receive and decode a command from the reader. It is expressed in dBm (decibels relative to one milliwatt). A more negative dBm value indicates better (more sensitive) reception.
+
+For example, a sensitivity of -60 dBm means the tag can operate at an input power 60 dB below 1 mW, which is equivalent to 1 nanowatt (1 nW).
+
+─────────────────────────────────────────────
+2. WHY IT MATTERS
+─────────────────────────────────────────────
+In a real NFC system, the available power at the tag antenna decreases rapidly with distance (following a 1/r³ relationship in the near-field regime). A tag with poor receiver sensitivity will fail to operate at the distances specified for the application, leading to customer-visible read failures.
+
+Receiver sensitivity also interacts with the tag's power harvesting capability. A tag that powers up at a certain field level but cannot reliably decode data until a stronger field is applied provides a degraded user experience.
+
+─────────────────────────────────────────────
+3. MEASUREMENT METHOD (ILLUSTRATIVE)
+─────────────────────────────────────────────
+In a characterization bench, receiver sensitivity is measured by gradually reducing the reader field strength (expressed as H-field in A/m, or equivalently as power at the reader antenna port) until the tag stops responding correctly. The last power level at which the tag correctly returns a valid response is recorded as the sensitivity measurement.
+
+ISO 14443 defines specific measurement coil geometries and test conditions to ensure reproducibility across different test setups.
+
+─────────────────────────────────────────────
+4. TYPICAL SPECIFICATION (SYNTHETIC ILLUSTRATIVE VALUES)
+─────────────────────────────────────────────
+Nominal: -60 dBm
+LSL:     -65 dBm  (better than -65 is acceptable; more negative = more sensitive)
+USL:     -50 dBm  (sensitivity worse than -50 dBm fails)
+
+Note: For sensitivity parameters, the sign convention must be tracked carefully. A measurement of -63 dBm is better than -50 dBm. The LSL and USL refer to the numeric value, not the physical sensitivity.
+
+─────────────────────────────────────────────
+5. SYSTEMATIC SHIFT — INVESTIGATION GUIDE
+─────────────────────────────────────────────
+A systematic upward shift in receiver sensitivity (e.g., from -60 dBm toward -50 dBm) across an entire production lot is a serious finding. It means chips are becoming less sensitive on average. Possible causes:
+
+- LNA (low-noise amplifier) gain degradation due to process variation
+- Excessive leakage or mismatch in the RF front-end transistors
+- Antenna quality factor (Q) reduction due to resistive losses
+- Incorrect bias point in the RF input stage
+- Test equipment calibration offset (systematic error affecting the entire lot's measurements)
+
+A systematic shift of 3-5 dBm across a lot, with the distribution remaining otherwise Gaussian, is a strong indicator of a process-level shift rather than random variation or test equipment noise.
+
+If the shift is confirmed in independent re-test with calibrated equipment, the root cause investigation should focus on:
+1. Process control charts for the implant, gate oxide, and BEOL steps for the affected wafers
+2. Comparison with the electrical parametric monitor (EPM) data for the same wafers
+3. Die-level spatial maps to identify any within-wafer gradient
+
+NOTE: All values in this document are synthetic and illustrative only.

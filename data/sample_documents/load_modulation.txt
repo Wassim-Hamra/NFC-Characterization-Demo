@@ -1,0 +1,62 @@
+SYNTHETIC EDUCATIONAL MATERIAL — NOT REAL NXP SPECIFICATIONS
+Document: Load Modulation — Characterization Notes
+Version: Illustrative v1.0
+
+─────────────────────────────────────────────
+1. WHAT IS LOAD MODULATION?
+─────────────────────────────────────────────
+Load modulation is the mechanism by which an NFC tag (the passive device) communicates data back to the NFC reader. Because the tag has no active transmitter, it cannot generate its own RF signal. Instead, it encodes data by periodically switching a resistive or capacitive load across its antenna terminals. This change in load alters the impedance seen by the reader coil and induces a detectable voltage variation on the reader's antenna, which the reader then decodes.
+
+This communication direction (tag to reader) is called the uplink or backscatter channel.
+
+─────────────────────────────────────────────
+2. HOW IT IS MEASURED
+─────────────────────────────────────────────
+The load modulation amplitude is typically measured as the peak-to-peak voltage variation induced at the reader antenna terminals when the tag toggles its modulation load. It is expressed in millivolts (mV). A calibrated reference reader antenna is placed at a defined distance from the tag under test, and the modulation signal is captured on an oscilloscope or vector signal analyser.
+
+The measurement depends on:
+- Antenna coupling distance
+- Tag antenna quality factor (Q)
+- Modulation element value (resistance or capacitance)
+- Supply voltage available to the IC
+
+─────────────────────────────────────────────
+3. TYPICAL SPECIFICATION (SYNTHETIC ILLUSTRATIVE VALUES)
+─────────────────────────────────────────────
+Nominal:  160 mV
+LSL:      120 mV
+USL:      200 mV
+
+─────────────────────────────────────────────
+4. FAILURE MODES AND CAUSES
+─────────────────────────────────────────────
+LOW MODULATION AMPLITUDE (below LSL):
+- Modulation element (resistor or switch) has incorrect value
+- IC supply voltage too low (insufficient field strength)
+- Poor antenna coupling in test fixture
+- Damaged modulation circuitry
+
+HIGH MODULATION AMPLITUDE (above USL):
+- Modulation element value too aggressive
+- Antenna overshoot due to high Q factor
+- Test fixture artefact (ground loop, impedance mismatch)
+
+BIMODAL DISTRIBUTION:
+A bimodal distribution in load modulation amplitude is a significant finding. It suggests that chips in the lot are splitting into two distinct operating regimes. Possible causes include:
+- Two different die revisions mixed in one lot (traceability failure)
+- A manufacturing parameter with bimodal distribution affecting the modulation element
+- Two distinct test conditions (temperature, voltage) being inadvertently mixed in the dataset
+- A process step affecting a subset of wafers (e.g. etch depth variation across wafer)
+
+A bimodal distribution does not automatically indicate a defect. If both populations remain within specification, all chips may be functionally compliant. However, the presence of two populations is a process signal that warrants investigation to understand root cause, prevent potential yield loss in future lots, and ensure long-term reliability.
+
+─────────────────────────────────────────────
+5. INVESTIGATION STRATEGY FOR BIMODAL DISTRIBUTIONS
+─────────────────────────────────────────────
+1. Stratify by wafer ID: Does the bimodality appear on specific wafers?
+2. Stratify by test site: Is one population concentrated on certain probers or contactors?
+3. Stratify by test condition: Does the split appear only at a specific temperature or voltage corner?
+4. Cross-reference with process data: Look for lot-level process deviations (e.g. etch rate, implant dose, anneal temperature).
+5. Check die assignment: Verify that all dies in the lot originate from the same process split and revision.
+
+NOTE: All values in this document are synthetic and illustrative only. This is an independent educational prototype.

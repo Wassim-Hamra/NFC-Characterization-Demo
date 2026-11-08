@@ -1,0 +1,82 @@
+SYNTHETIC EDUCATIONAL MATERIAL — NOT REAL NXP SPECIFICATIONS
+Document: Failure Analysis & Anomaly Investigation Guide
+Version: Illustrative v1.0
+
+─────────────────────────────────────────────
+1. CLASSIFYING ANOMALIES
+─────────────────────────────────────────────
+In semiconductor characterization, anomalies are classified along two independent dimensions:
+
+Dimension 1 — Specification status:
+  PASS: Measurement within specification limits (LSL ≤ value ≤ USL)
+  FAIL: Measurement outside specification limits
+
+Dimension 2 — Statistical behaviour:
+  NORMAL: Distribution consistent with expected Gaussian variation
+  ANOMALOUS: Distribution shows unexpected patterns (shift, spread, bimodality, skew)
+
+IMPORTANT: These two dimensions are independent. A distribution can be statistically anomalous while every individual measurement remains within specification. Conversely, isolated out-of-spec measurements can occur without any detectable distributional anomaly.
+
+─────────────────────────────────────────────
+2. SYSTEMATIC SHIFT — INVESTIGATION APPROACH
+─────────────────────────────────────────────
+A systematic shift occurs when the mean of a parameter distribution moves away from its nominal value across a production lot. The shape of the distribution (Gaussian) is preserved, but it is displaced.
+
+Evidence pattern:
+- Increased mean (or median) relative to reference lots
+- Increased failure rate on one side of the specification
+- Clear separation between this lot's distribution and reference lots in a box plot
+
+Investigation steps:
+1. Confirm the shift is real: retest a sample of chips using independent equipment
+2. Check test equipment calibration records for the period when this lot was tested
+3. Review process control charts (Cp, Cpk) for the relevant process module
+4. Check if the shift is wafer-level (use die maps to look for spatial patterns)
+5. Cross-reference with electrical parametric monitor (EPM) data
+6. Check if any process step was changed, re-qualified, or ran outside its control limits during this lot
+
+─────────────────────────────────────────────
+3. BIMODAL DISTRIBUTION — INVESTIGATION APPROACH
+─────────────────────────────────────────────
+A bimodal distribution produces a histogram with two distinct peaks. When identified using Gaussian Mixture Models or histogram analysis, it suggests that the population can be separated into two sub-groups with different parameter values.
+
+Evidence pattern:
+- Histogram shows two peaks
+- GMM fit with 2 components provides significantly better BIC than 1 component
+- Component weights are non-trivial (not 95%/5% but closer to 70%/30% or 50%/50%)
+
+Possible root causes:
+  Process-related:
+  - Two wafer lots merged into one production lot (mixing effect)
+  - A bimodal process step (e.g., CMP planarisation with two operating regimes)
+  - Within-lot variation correlated with wafer position (centre vs. edge)
+  - Different anneal temperatures experienced by subsets of wafers in the furnace boat
+
+  Test-related:
+  - Two test sites with systematic offset (handler prober heads)
+  - Two test sessions with different equipment calibration states
+  - Mixed test conditions (temperature not fully stabilised on some measurements)
+
+  Design-related (rare in a stable process):
+  - Flip in a digital configuration bit affecting a subset of chips
+  - Two populations of threshold voltages in a critical transistor
+
+Investigation steps:
+1. Stratify the bimodal dataset: plot histograms separately by wafer ID, test site, test session date
+2. Identify whether one stratum accounts entirely for one mode
+3. Cross-reference with process data, especially lot-level and wafer-level process metrics
+4. If test site is the differentiator, investigate handler calibration
+
+─────────────────────────────────────────────
+4. STATISTICAL ANOMALY VS. CONFIRMED DEFECT
+─────────────────────────────────────────────
+A statistical anomaly is an investigation signal, not a confirmed manufacturing defect. Before concluding that a defect exists:
+
+- The measurement must be verified independently
+- The statistical signal must be strong enough (sufficient sample size, BIC evidence)
+- Alternative explanations (test artefacts, data processing errors) must be excluded
+- Engineering judgement must be applied alongside the statistical analysis
+
+Automated tools, including AI-assisted analysis, can accelerate the investigation process and highlight patterns that require attention. However, final engineering disposition decisions must be made by qualified engineers based on verified data and understanding of the manufacturing process.
+
+NOTE: All content in this document is entirely synthetic and illustrative. This is an independent educational prototype not affiliated with NXP Semiconductors.

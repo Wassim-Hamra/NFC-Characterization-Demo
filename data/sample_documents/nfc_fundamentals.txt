@@ -1,0 +1,44 @@
+SYNTHETIC EDUCATIONAL MATERIAL — NOT REAL NXP SPECIFICATIONS
+Document: NFC Fundamentals
+Version: Illustrative v1.0
+
+─────────────────────────────────────────────
+1. WHAT IS NFC?
+─────────────────────────────────────────────
+Near Field Communication (NFC) is a short-range wireless communication technology operating at 13.56 MHz that enables contactless data exchange between compatible devices at distances typically below 10 cm. NFC builds on the ISO/IEC 14443 and ISO/IEC 18092 standards, which define the physical layer, anti-collision, and transmission protocols.
+
+An NFC system typically consists of an initiator (reader/writer) and a target (tag or card). The initiator generates an alternating magnetic field at 13.56 MHz. The target draws power from this field through inductive coupling and communicates by modulating the load on its antenna, a technique called load modulation.
+
+─────────────────────────────────────────────
+2. OPERATING PRINCIPLES
+─────────────────────────────────────────────
+The electromagnetic coupling between the reader coil and the tag antenna follows the principle of mutual inductance. The strength of coupling depends on the geometry and alignment of both coils, the distance between them, and the operating environment (metallic objects, human body proximity).
+
+The tag IC (integrated circuit) includes:
+- A rectifier that converts AC RF energy to DC supply voltage
+- A voltage limiter (clamp) to protect against excess field strength
+- A demodulator to decode the downlink command from the reader
+- A load modulator to send data back to the reader
+- Digital logic and memory for the application layer
+
+─────────────────────────────────────────────
+3. KEY PARAMETERS IN CHARACTERIZATION
+─────────────────────────────────────────────
+During production characterization, engineers measure several parameters to verify that the IC meets its design and specification requirements across a range of operating conditions:
+
+Carrier Frequency Accuracy: The 13.56 MHz reference frequency used by the reader must remain within defined tolerances to ensure the tag's demodulator can correctly detect and process the signal.
+
+Load Modulation Amplitude: The strength of the signal sent by the tag back to the reader. If too low, the reader cannot reliably detect the tag's response. If too high or erratic, it may cause inter-modulation or cross-talk issues.
+
+Receiver Sensitivity: The minimum signal power level at which the IC can correctly decode an incoming command. Expressed in dBm (decibels relative to one milliwatt). A more negative value indicates better sensitivity.
+
+Modulation Depth: The ratio between the modulated and unmodulated carrier amplitude, expressed as a percentage. Governs how clearly the binary data transitions are encoded.
+
+─────────────────────────────────────────────
+4. PRODUCTION TESTING PHILOSOPHY
+─────────────────────────────────────────────
+In semiconductor manufacturing, characterization tests are designed to verify not only nominal performance but also behaviour at corners: low temperature, high temperature, minimum supply voltage, maximum supply voltage. This corner testing reveals whether the design has sufficient margin to meet specifications across all expected operating conditions.
+
+Statistical process control (SPC) methods are used to monitor production lots and detect shifts or spreads in parameter distributions before they result in customer-impacting failures.
+
+NOTE: All measurement values, specification limits, and lot identifiers in this application are entirely synthetic and generated for educational purposes only.

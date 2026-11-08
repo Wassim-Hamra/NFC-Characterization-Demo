@@ -1,0 +1,68 @@
+SYNTHETIC EDUCATIONAL MATERIAL — NOT REAL NXP SPECIFICATIONS
+Document: Measurement Conditions & Test Corners
+Version: Illustrative v1.0
+
+─────────────────────────────────────────────
+1. STANDARD TEST CONDITIONS
+─────────────────────────────────────────────
+Semiconductor characterization tests are performed under controlled conditions to ensure reproducibility and comparability across lots and sites. The standard measurement conditions for NFC IC testing (illustrative) are:
+
+Temperature: 25°C (room temperature, also called "nominal" or "TYP" corner)
+Supply Voltage: 3.3 V (nominal supply voltage for the illustrated IC family)
+Humidity: Controlled, typically 40-60% RH
+Settling time: IC must be powered and stable for at least 1 ms before measurement begins
+
+─────────────────────────────────────────────
+2. CORNER TESTING
+─────────────────────────────────────────────
+Corner testing verifies that the IC meets its specifications not only at nominal conditions but also at the extremes of its operating range.
+
+TEMPERATURE CORNERS (ILLUSTRATIVE):
+- Cold corner:  -40°C (automotive applications) or 0°C (consumer/industrial)
+- Hot corner:   +85°C (industrial) or +125°C (automotive)
+- Nominal:       25°C
+
+VOLTAGE CORNERS (ILLUSTRATIVE):
+- Low voltage:  3.0 V (Vdd_min)
+- Nominal:      3.3 V
+- High voltage: 3.6 V (Vdd_max)
+
+COMBINED CORNERS:
+Full corner testing combines temperature and voltage extremes:
+- Best case:  low temperature + high voltage (fastest transistors, most current)
+- Worst case: high temperature + low voltage (slowest transistors, least margin)
+
+─────────────────────────────────────────────
+3. TEST CONDITIONS IN THIS APPLICATION
+─────────────────────────────────────────────
+The synthetic dataset in this workbench uses the following illustrative test conditions:
+
+Temperatures: 0°C, 25°C, 85°C
+Voltages: 3.0 V, 3.3 V, 3.6 V
+Test conditions labelled: COLD, NOMINAL, HOT, LOW_VDD, HIGH_VDD
+
+─────────────────────────────────────────────
+4. IMPACT OF TEMPERATURE ON MEASUREMENTS
+─────────────────────────────────────────────
+Most NFC IC parameters show temperature dependence:
+
+Carrier Frequency: Crystal oscillator frequency shifts with temperature. The frequency-temperature characteristic (FTC) of a quartz crystal is typically a parabola with its peak near room temperature.
+
+Load Modulation: The on-resistance of the modulation switch increases with temperature (for NMOS devices), which can slightly reduce the modulation amplitude at hot corners.
+
+Receiver Sensitivity: Thermal noise power increases with temperature (kTB), slightly degrading sensitivity at hot corners.
+
+Modulation Depth: May shift with temperature due to changes in transistor threshold voltages and saturation characteristics.
+
+─────────────────────────────────────────────
+5. TEST SITE AND HANDLER EFFECTS
+─────────────────────────────────────────────
+In high-volume manufacturing, chips are tested on automated test equipment (ATE) using chip handlers. Each test site (prober head or contactor nest) can introduce systematic offset due to:
+- Contact resistance variation
+- Parasitics in the probe card
+- Local thermal gradients
+- Calibration differences between handler sites
+
+Good practice includes comparing measurement distributions across test sites within the same lot. A systematic offset between sites indicates a handler-related systematic error rather than a true device variation.
+
+NOTE: All values and conditions described are entirely synthetic and illustrative.

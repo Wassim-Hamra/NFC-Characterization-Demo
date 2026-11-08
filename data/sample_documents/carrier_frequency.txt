@@ -1,0 +1,42 @@
+SYNTHETIC EDUCATIONAL MATERIAL — NOT REAL NXP SPECIFICATIONS
+Document: Carrier Frequency — Characterization Notes
+Version: Illustrative v1.0
+
+─────────────────────────────────────────────
+1. PARAMETER DEFINITION
+─────────────────────────────────────────────
+The NFC carrier frequency is nominally 13.56 MHz, as mandated by ISO/IEC 14443-2. This frequency lies in the globally allocated ISM (Industrial, Scientific, and Medical) band at 13.553–13.567 MHz. The standard allows for a frequency tolerance of ±7 kHz around the nominal value, though tighter product specifications may apply for specific product families.
+
+─────────────────────────────────────────────
+2. WHY IT MATTERS
+─────────────────────────────────────────────
+The tag IC contains a demodulator circuit tuned to detect the 13.56 MHz carrier. If the reader's frequency deviates significantly, the demodulator's ability to reliably recover the data clock degrades. This results in higher bit-error rates and potentially failed transactions.
+
+The tag antenna is also designed as a resonant circuit tuned close to 13.56 MHz. A mismatch between the antenna resonance frequency and the actual carrier frequency reduces power transfer efficiency, potentially preventing the IC from powering up at all in weak-field conditions.
+
+─────────────────────────────────────────────
+3. MEASUREMENT METHOD (ILLUSTRATIVE)
+─────────────────────────────────────────────
+In a characterization environment, the carrier frequency is measured at the output of the signal generator connected to the reference reader loop. A frequency counter or spectrum analyser is used to verify the actual frequency with sub-kHz precision.
+
+Environmental factors such as temperature drift in the oscillator crystal can shift the frequency slightly. At cold temperatures (e.g. -40°C), the frequency may shift up; at hot temperatures (+85°C), it may shift down, depending on the crystal's frequency-temperature characteristic.
+
+─────────────────────────────────────────────
+4. TYPICAL SPECIFICATION (SYNTHETIC ILLUSTRATIVE VALUES)
+─────────────────────────────────────────────
+Nominal:  13.56 MHz
+LSL:      13.50 MHz  (lower specification limit)
+USL:      13.62 MHz  (upper specification limit)
+
+These values are entirely illustrative. They are not drawn from any real product specification sheet.
+
+─────────────────────────────────────────────
+5. COMMON CAUSES OF OUT-OF-SPEC READINGS
+─────────────────────────────────────────────
+- Oscillator crystal ageing or damage during handling
+- Test equipment calibration drift
+- Electromagnetic interference in the test environment
+- Incorrect test setup (e.g., cable length affecting impedance)
+- Temperature not stabilised before measurement
+
+NOTE: All values in this document are synthetic and illustrative only.

@@ -1,0 +1,61 @@
+SYNTHETIC EDUCATIONAL MATERIAL — NOT REAL NXP SPECIFICATIONS
+Document: NFC IC Test Procedures — Overview
+Version: Illustrative v1.0
+
+─────────────────────────────────────────────
+1. CHARACTERIZATION VERSUS PRODUCTION TEST
+─────────────────────────────────────────────
+In semiconductor engineering, two distinct types of testing are performed:
+
+Characterization Testing: Performed in engineering labs, usually on a sample of dies from multiple wafers and lots. The goal is to fully understand the device's behaviour, verify that it meets design intent, identify operating margins, and define specification limits. Characterization results drive the creation of production test limits.
+
+Production Testing: Performed on every manufactured chip using automated test equipment (ATE). Tests are designed to be fast (typically milliseconds per chip) and to reliably separate passing chips from failing ones based on the limits derived from characterization.
+
+─────────────────────────────────────────────
+2. TYPICAL CHARACTERIZATION WORKFLOW
+─────────────────────────────────────────────
+Step 1 — Test Plan Definition:
+Engineering defines which parameters to measure, at which conditions, using which test equipment and reference setups. Test conditions (temperature, voltage corners) are selected to cover the full application operating range.
+
+Step 2 — Sample Preparation:
+A representative sample of dies or packaged chips is selected from multiple wafers, covering the expected process variation space (wafer edge vs. centre, different wafer lots).
+
+Step 3 — Measurement Execution:
+Measurements are performed at each defined operating condition. Data is recorded with full traceability: chip ID, wafer ID, lot ID, test timestamp, test site, operator, and equipment ID.
+
+Step 4 — Data Quality Check:
+Before analysis, the dataset is reviewed for missing values, outliers, duplicate records, and measurement anomalies. Suspect data points must be investigated, not silently discarded.
+
+Step 5 — Statistical Analysis:
+Descriptive statistics, histograms, box plots, and trend analyses are performed. Statistical Process Control (SPC) charts are used to verify that the manufacturing process is in control.
+
+Step 6 — Specification Validation:
+Each measurement is compared against the applicable specification limits. Pass rates are calculated per parameter and per operating condition.
+
+Step 7 — Report and Disposition:
+Engineering prepares a characterization report documenting the measurement results, observed variation, corner margins, and any anomalies detected. Disposition decisions (accept, further investigation, reject) are made based on the validated data.
+
+─────────────────────────────────────────────
+3. DATA COLLECTION BEST PRACTICES
+─────────────────────────────────────────────
+Full traceability: Every measurement must be linked to its chip ID, wafer, lot, test condition, and test timestamp.
+
+Stability: Allow equipment and DUT (device under test) to stabilise thermally before recording measurements. Temperature settling typically requires 1-5 minutes after the chuck reaches the target temperature.
+
+Control wafers: Include reference chips (golden units) in each test session to verify test equipment performance and detect calibration drift.
+
+Blind reruns: For anomalous results, perform a blind rerun (using different equipment or operators if possible) to distinguish real device effects from test artefacts.
+
+─────────────────────────────────────────────
+4. INTERPRETING ANOMALIES
+─────────────────────────────────────────────
+An anomalous measurement result can originate from:
+(a) A genuine device failure or degradation
+(b) A systematic process shift affecting a subset of the lot
+(c) A test equipment calibration error
+(d) An environmental disturbance during measurement (EMI, vibration)
+(e) A data recording or processing error
+
+The first investigative step is always to verify the measurement itself before concluding that a device failure has occurred. Retest using independent equipment, in a different test session, with control units for reference.
+
+NOTE: All procedures and values described are entirely synthetic and illustrative.
