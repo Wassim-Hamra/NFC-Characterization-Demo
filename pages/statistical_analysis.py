@@ -13,19 +13,19 @@ from scipy.stats import norm
 from src.statistics_engine import compute_stats, per_lot_stats
 from src.multimodal_analysis import fit_gmm, gmm_pdf, component_pdf
 
-NXP_ORANGE = "#FCA600"
-NXP_BLUE   = "#0EAFE0"
-NXP_GREEN  = "#69CA00"
-NXP_RED    = "#ef4444"
-PLOT_BG    = "#0d0d1e"
-GRID_COLOR = "#1e1e35"
+NXP_ORANGE = "#ea7600"
+NXP_BLUE   = "#0096d6"
+NXP_GREEN  = "#2ea043"
+NXP_RED    = "#da3633"
+PLOT_BG    = "#161b22"
+GRID_COLOR = "#21262d"
 
 LOT_COLORS = {
     "LOT-A": NXP_BLUE,
     "LOT-B": NXP_GREEN,
     "LOT-C": NXP_RED,
     "LOT-D": NXP_ORANGE,
-    "LOT-E": "#a855f7",
+    "LOT-E": "#8b5cf6",
 }
 
 
@@ -33,15 +33,15 @@ def _theme():
     return dict(
         paper_bgcolor=PLOT_BG,
         plot_bgcolor=PLOT_BG,
-        font=dict(color="#c8c8e0", family="Inter, Segoe UI, sans-serif", size=11),
-        margin=dict(l=50, r=20, t=40, b=50),
+        font=dict(color="#c9d1d9", family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", size=11),
+        margin=dict(l=50, r=20, t=35, b=45),
     )
 
 
 def render(df: pl.DataFrame, specs: dict):
-    st.markdown("<div class='page-title'>Statistical Analysis</div>", unsafe_allow_html=True)
+    st.markdown("<div class='page-title'>Statistical Analysis &amp; Process Modelling</div>", unsafe_allow_html=True)
     st.markdown(
-        "<div class='page-subtitle'>Descriptive statistics, distribution analysis, and multimodal investigation</div>",
+        "<div class='page-subtitle'>Parametric capability estimation (Cp / Cpk), multi-lot variance, and Gaussian Mixture decomposition</div>",
         unsafe_allow_html=True,
     )
 
@@ -80,7 +80,7 @@ def render(df: pl.DataFrame, specs: dict):
     unit = spec.get("unit", "")
 
     # ── Stats table ───────────────────────────────────────────────
-    st.markdown("<div class='section-header'>Descriptive Statistics</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Descriptive Statistics &amp; Process Indices</div>", unsafe_allow_html=True)
     values = param_data["measured_value"].to_numpy()
     summary = compute_stats(values, lsl=lsl, usl=usl)
     stats_dict = summary.to_dict()
@@ -98,15 +98,15 @@ def render(df: pl.DataFrame, specs: dict):
             with cols2[i]:
                 st.metric(k, str(v))
 
-    st.markdown("<hr style='border-color:#1e1e35;margin:1.2rem 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:#30363d;margin:1.1rem 0;'>", unsafe_allow_html=True)
 
     # ── Tabs ─────────────────────────────────────────────────────
     tabs = st.tabs([
-        "📊 Distribution",
-        "📦 Box Plot",
-        "📈 Trend",
-        "🔗 Correlation",
-        "🔍 Multimodal",
+        "Distribution Density",
+        "Cross-Lot Variation",
+        "Chronological Trend",
+        "Parametric Correlation",
+        "Multimodal Decomposition",
     ])
 
     with tabs[0]:
@@ -147,7 +147,7 @@ def _render_histogram(param_data, param, unit, lsl, usl, nominal, sel_lots):
             x=param_data["measured_value"].to_numpy(),
             nbinsx=40,
             marker_color=NXP_BLUE,
-            marker_line_color="#0a0a14",
+            marker_line_color="#161b22",
             marker_line_width=0.4,
             hovertemplate="Value: %{x}<br>Count: %{y}<extra></extra>",
             name=param,
@@ -172,7 +172,7 @@ def _render_histogram(param_data, param, unit, lsl, usl, nominal, sel_lots):
         yaxis_title="Count",
         xaxis=dict(gridcolor=GRID_COLOR),
         yaxis=dict(gridcolor=GRID_COLOR),
-        legend=dict(bgcolor="#12122a", bordercolor="#1e1e35"),
+        legend=dict(bgcolor="#161b22", bordercolor="#30363d"),
         height=380,
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -212,7 +212,7 @@ def _render_boxplot(filtered, param, unit, lsl, usl):
         xaxis_title="Production Lot",
         xaxis=dict(gridcolor=GRID_COLOR),
         yaxis=dict(gridcolor=GRID_COLOR),
-        legend=dict(bgcolor="#12122a", bordercolor="#1e1e35"),
+        legend=dict(bgcolor="#161b22", bordercolor="#30363d"),
         height=400,
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -261,7 +261,7 @@ def _render_trend(param_data, param, unit):
         yaxis_title=f"{param} ({unit})",
         xaxis=dict(gridcolor=GRID_COLOR),
         yaxis=dict(gridcolor=GRID_COLOR),
-        legend=dict(bgcolor="#12122a", bordercolor="#1e1e35"),
+        legend=dict(bgcolor="#161b22", bordercolor="#30363d"),
         height=400,
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -314,15 +314,15 @@ def _render_correlation(filtered, specs):
         x=labels,
         y=labels,
         colorscale=[
-            [0.0,  "#ef4444"],
-            [0.5,  "#1e1e35"],
-            [1.0,  "#0EAFE0"],
+            [0.0,  "#da3633"],
+            [0.5,  "#21262d"],
+            [1.0,  "#0096d6"],
         ],
         zmin=-1, zmax=1,
         text=np.round(corr.values, 2),
         texttemplate="%{text}",
         hovertemplate="x: %{x}<br>y: %{y}<br>Correlation: %{z:.3f}<extra></extra>",
-        colorbar=dict(title="r", tickfont=dict(color="#c8c8e0")),
+        colorbar=dict(title="r", tickfont=dict(color="#c9d1d9")),
     ))
     fig.update_layout(
         **_theme(),
@@ -336,11 +336,9 @@ def _render_correlation(filtered, specs):
 
 def _render_multimodal(param_data, param, unit, sel_lots, lsl, usl):
     st.markdown(
-        """<p style='color:#9999bb;font-size:0.84rem;'>
-        Gaussian Mixture Model (GMM) analysis fits 1- and 2-component Gaussian models to the
-        selected distribution. A lower BIC for the 2-component model is evidence of bimodality.
-        Statistical evidence of two populations is an <strong>investigation signal</strong>,
-        not proof of a manufacturing defect.
+        """<p style='color:#8b949e;font-size:0.83rem;'>
+        Gaussian Mixture Model (GMM) decomposition compares 1- and 2-component Gaussian fits.
+        A lower Bayesian Information Criterion (ΔBIC &gt; 10) indicates statistically significant population splitting.
         </p>""",
         unsafe_allow_html=True,
     )
@@ -386,7 +384,7 @@ def _render_multimodal(param_data, param, unit, sel_lots, lsl, usl):
         nbinsx=40,
         histnorm="probability density",
         marker_color=NXP_BLUE,
-        marker_line_color="#0a0a14",
+        marker_line_color="#161b22",
         marker_line_width=0.4,
         opacity=0.5,
         name="Measurements",
@@ -437,7 +435,7 @@ def _render_multimodal(param_data, param, unit, sel_lots, lsl, usl):
         yaxis_title="Probability Density",
         xaxis=dict(gridcolor=GRID_COLOR),
         yaxis=dict(gridcolor=GRID_COLOR),
-        legend=dict(bgcolor="#12122a", bordercolor="#1e1e35", font=dict(size=11)),
+        legend=dict(bgcolor="#161b22", bordercolor="#30363d", font=dict(size=10)),
         height=420,
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -452,11 +450,14 @@ def _render_multimodal(param_data, param, unit, sel_lots, lsl, usl):
     insight = result.insight_text(param_labels.get(param, param), lot_label)
 
     border_color = NXP_ORANGE if result.is_bimodal else NXP_BLUE
-    icon = "⚠️" if result.is_bimodal else "ℹ️"
+    badge = "<span class='badge badge-warn'>BIMODAL SPLIT</span>" if result.is_bimodal else "<span class='badge badge-info'>UNIMODAL BASELINE</span>"
     st.markdown(
         f"""<div class='nxp-card' style='border-left:3px solid {border_color};margin-top:0.8rem;'>
-            <strong style='color:{border_color};'>{icon} Automated Insight</strong><br>
-            <span style='color:#c8c8e0;font-size:0.86rem;'>{insight}</span>
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.3rem;">
+                {badge}
+                <strong style='color:#f0f6fc;font-size:0.85rem;'>GMM Decomposition Assessment</strong>
+            </div>
+            <span style='color:#c9d1d9;font-size:0.84rem;'>{insight}</span>
         </div>""",
         unsafe_allow_html=True,
     )

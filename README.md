@@ -49,7 +49,7 @@ The application is structured around a complete characterization workflow:
   - Correlation heatmap between parameters and operating corners.
 - **Multimodal Distribution Detection (GMM):** Fits 1- and 2-component Gaussian Mixture Models using scikit-learn. Compares Bayesian Information Criterion (BIC) scores to detect split populations, displays component bell curves, and generates a data-driven engineering insight explaining the pattern.
 
-### 4. 🤖 AI Technical Investigation (`pages/ai_investigation.py`)
+### 4. Technical Diagnostics & Root Cause Analysis (`pages/ai_investigation.py`)
 - A technical investigation assistant built with **Retrieval-Augmented Generation (RAG)** over 8 synthetic technical guides (NFC standards, load modulation, receiver sensitivity, test procedures, failure analysis).
 - Pure Python **BM25 retrieval engine** (starts up in seconds with zero heavy downloads).
 - **Google Gemini API integration:** Synthesizes clear technical explanations strictly grounded in the retrieved documentation, with document citations.
@@ -65,7 +65,7 @@ The synthetic dataset includes 3 realistic scenarios to demonstrate different en
 | Scenario | Lot | What happens |
 |---|---|---|
 | **A. Normal Reference** | `LOT-A`, `LOT-B`, `LOT-E` | Clean Gaussian distributions within specification limits. Reference baseline. |
-| **B. Systematic Shift** | `LOT-C` | Upward shift in `receiver_sensitivity_dbm` resulting in ~21% out-of-spec measurements (triggers a 🔴 **FAIL** finding). |
+| **B. Systematic Shift** | `LOT-C` | Upward shift in `receiver_sensitivity_dbm` resulting in ~21% out-of-spec measurements (triggers a **FAIL** audit). |
 | **C. Bimodal Distribution** | `LOT-D` | Two distinct sub-populations in `load_modulation_mv` ($\mu_1 \approx 145\text{ mV}$, $\mu_2 \approx 185\text{ mV}$). Detected by GMM with $\Delta\text{BIC} = 104.3$. |
 
 ---

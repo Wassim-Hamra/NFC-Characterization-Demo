@@ -1,307 +1,311 @@
 /* ============================================================
-   NFC Characterization Workbench — NXP-themed Dark Stylesheet
-   NXP Brand Colors: Orange #FCA600 | Sky Blue #0EAFE0 | Green #69CA00
+   NFC Characterization Analytics Workbench — NXP Industrial Theme
+   Palette: Deep Slate #0d1117 | Surfaces #161b22 | Borders #30363d
+   Accents: NXP Amber #ea7600 | Signal Blue #0096d6 | Success #2ea043 | Critical #da3633
    ============================================================ */
 
-/* ── Global reset & background ── */
+/* ── Global Reset & Typography ── */
 html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"] {
-    background-color: #0a0a14 !important;
-    color: #f0f0f5 !important;
-    font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif !important;
+    background-color: #0d1117 !important;
+    color: #e6edf3 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif !important;
 }
 
 [data-testid="stSidebar"] {
-    background-color: #0d0d1a !important;
-    border-right: 1px solid #1e1e35 !important;
+    background-color: #161b22 !important;
+    border-right: 1px solid #30363d !important;
 }
 
 [data-testid="stSidebar"] > div {
-    background-color: #0d0d1a !important;
+    background-color: #161b22 !important;
 }
 
-/* ── Sidebar nav radio buttons ── */
-[data-testid="stSidebar"] .stRadio > label {
-    color: #a0a0c0 !important;
-    font-size: 0.85rem !important;
-}
-
-[data-testid="stSidebar"] .stRadio [data-testid="stMarkdownContainer"] p {
-    color: #c8c8e0 !important;
-}
-
-/* ── Top header bar accent ── */
+/* ── Top Header Bar ── */
 header[data-testid="stHeader"] {
-    background-color: #0a0a14 !important;
-    border-bottom: 2px solid #FCA600 !important;
+    background-color: #0d1117 !important;
+    border-bottom: 1px solid #30363d !important;
 }
 
-/* ── Metric cards (KPI) ── */
+/* ── Metric Cards (KPI) ── */
 [data-testid="stMetric"] {
-    background: linear-gradient(135deg, #12122a 0%, #1a1a35 100%) !important;
-    border: 1px solid #1e1e45 !important;
-    border-radius: 10px !important;
-    padding: 1rem 1.2rem !important;
-    border-left: 3px solid #FCA600 !important;
+    background-color: #161b22 !important;
+    border: 1px solid #30363d !important;
+    border-radius: 4px !important;
+    padding: 0.85rem 1.1rem !important;
+    box-shadow: none !important;
 }
 
 [data-testid="stMetricLabel"] {
-    color: #8888aa !important;
-    font-size: 0.75rem !important;
+    color: #8b949e !important;
+    font-size: 0.72rem !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
+    letter-spacing: 0.06em !important;
+    font-weight: 600 !important;
 }
 
 [data-testid="stMetricValue"] {
-    color: #f0f0ff !important;
-    font-size: 1.8rem !important;
-    font-weight: 700 !important;
+    color: #f0f6fc !important;
+    font-size: 1.55rem !important;
+    font-weight: 600 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
 }
 
 [data-testid="stMetricDelta"] {
-    font-size: 0.8rem !important;
+    font-size: 0.78rem !important;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
 }
 
-/* ── DataFrame / Table ── */
+/* ── Tables & DataFrames ── */
 [data-testid="stDataFrame"] {
-    border: 1px solid #1e1e45 !important;
-    border-radius: 8px !important;
+    border: 1px solid #30363d !important;
+    border-radius: 4px !important;
     overflow: hidden !important;
+    background-color: #161b22 !important;
 }
 
-/* ── Tabs ── */
+/* ── Tabs Navigation ── */
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background-color: #12122a !important;
-    border-bottom: 1px solid #1e1e45 !important;
-    gap: 0 !important;
+    background-color: transparent !important;
+    border-bottom: 1px solid #30363d !important;
+    gap: 0.5rem !important;
+    padding-bottom: 0 !important;
 }
 
 [data-testid="stTabs"] [data-baseweb="tab"] {
-    color: #8888aa !important;
+    color: #8b949e !important;
     background: transparent !important;
     border-bottom: 2px solid transparent !important;
     font-size: 0.85rem !important;
-    padding: 0.6rem 1.2rem !important;
+    font-weight: 500 !important;
+    padding: 0.55rem 0.9rem !important;
 }
 
 [data-testid="stTabs"] [aria-selected="true"] {
-    color: #FCA600 !important;
-    border-bottom: 2px solid #FCA600 !important;
+    color: #f0f6fc !important;
+    border-bottom: 2px solid #ea7600 !important;
     background: transparent !important;
+    font-weight: 600 !important;
 }
 
 /* ── Buttons ── */
 [data-testid="stButton"] > button {
-    background: linear-gradient(135deg, #FCA600 0%, #e09400 100%) !important;
-    color: #0a0a14 !important;
-    border: none !important;
-    border-radius: 6px !important;
-    font-weight: 600 !important;
-    font-size: 0.85rem !important;
-    padding: 0.4rem 1.2rem !important;
-    transition: opacity 0.2s !important;
+    background-color: #21262d !important;
+    color: #c9d1d9 !important;
+    border: 1px solid #30363d !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    font-size: 0.82rem !important;
+    padding: 0.4rem 0.9rem !important;
+    transition: all 0.15s ease !important;
 }
 
 [data-testid="stButton"] > button:hover {
-    opacity: 0.88 !important;
+    background-color: #30363d !important;
+    color: #f0f6fc !important;
+    border-color: #8b949e !important;
 }
 
-/* ── Download buttons ── */
+/* Primary Action Buttons (Submit / Investigate) */
+[data-testid="stFormSubmitButton"] > button {
+    background-color: #ea7600 !important;
+    color: #ffffff !important;
+    border: 1px solid #d46b00 !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    padding: 0.45rem 1.1rem !important;
+}
+
+[data-testid="stFormSubmitButton"] > button:hover {
+    background-color: #ff8500 !important;
+    color: #ffffff !important;
+}
+
+/* ── Download Buttons ── */
 [data-testid="stDownloadButton"] > button {
-    background: transparent !important;
-    color: #0EAFE0 !important;
-    border: 1px solid #0EAFE0 !important;
-    border-radius: 6px !important;
+    background-color: transparent !important;
+    color: #58a6ff !important;
+    border: 1px solid #30363d !important;
+    border-radius: 4px !important;
     font-weight: 500 !important;
     font-size: 0.82rem !important;
 }
 
 [data-testid="stDownloadButton"] > button:hover {
-    background: #0EAFE010 !important;
+    background-color: #1f6feb15 !important;
+    border-color: #58a6ff !important;
 }
 
-/* ── Selectbox / multiselect ── */
+/* ── Form Inputs & Selects ── */
 [data-testid="stSelectbox"] > div > div,
 [data-testid="stMultiSelect"] > div > div {
-    background-color: #12122a !important;
-    border: 1px solid #2a2a4a !important;
-    border-radius: 6px !important;
-    color: #f0f0f5 !important;
+    background-color: #0d1117 !important;
+    border: 1px solid #30363d !important;
+    border-radius: 4px !important;
+    color: #f0f6fc !important;
+    font-size: 0.85rem !important;
 }
 
-/* ── Slider ── */
-[data-testid="stSlider"] [data-baseweb="slider"] [data-testid="stThumbValue"] {
-    color: #FCA600 !important;
-}
-
-/* ── Text input ── */
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea {
-    background-color: #12122a !important;
-    border: 1px solid #2a2a4a !important;
-    color: #f0f0f5 !important;
-    border-radius: 6px !important;
+    background-color: #0d1117 !important;
+    border: 1px solid #30363d !important;
+    color: #f0f6fc !important;
+    border-radius: 4px !important;
+    font-size: 0.85rem !important;
 }
 
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
-    border-color: #FCA600 !important;
-    box-shadow: 0 0 0 1px #FCA60040 !important;
+    border-color: #ea7600 !important;
+    box-shadow: 0 0 0 1px #ea7600 !important;
 }
 
-/* ── Expander ── */
+/* ── Expanders ── */
 [data-testid="stExpander"] {
-    background-color: #12122a !important;
-    border: 1px solid #1e1e45 !important;
-    border-radius: 8px !important;
+    background-color: #161b22 !important;
+    border: 1px solid #30363d !important;
+    border-radius: 4px !important;
 }
 
 [data-testid="stExpander"] summary {
-    color: #c8c8e0 !important;
+    color: #c9d1d9 !important;
+    font-size: 0.85rem !important;
 }
 
-/* ── Info / warning / error boxes ── */
-[data-testid="stAlert"] {
-    border-radius: 8px !important;
+/* ── Plotly Charts ── */
+[data-testid="stPlotlyChart"] {
+    border: 1px solid #30363d !important;
+    border-radius: 4px !important;
+    overflow: hidden !important;
+    background-color: #161b22 !important;
 }
 
-/* ── Dividers ── */
+/* ── Horizontal Rules ── */
 hr {
-    border-color: #1e1e45 !important;
+    border-color: #30363d !important;
+    margin: 1.2rem 0 !important;
 }
 
-/* ── Custom card helper class ── */
+/* ── Custom Cards & Containers ── */
 .nxp-card {
-    background: linear-gradient(135deg, #12122a 0%, #1a1a35 100%);
-    border: 1px solid #1e1e45;
-    border-radius: 10px;
-    padding: 1.2rem 1.4rem;
-    margin-bottom: 1rem;
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
 }
 
-.nxp-card-orange { border-left: 3px solid #FCA600; }
-.nxp-card-blue   { border-left: 3px solid #0EAFE0; }
-.nxp-card-green  { border-left: 3px solid #69CA00; }
-.nxp-card-red    { border-left: 3px solid #ef4444; }
+.nxp-card-orange { border-left: 3px solid #ea7600; }
+.nxp-card-blue   { border-left: 3px solid #0096d6; }
+.nxp-card-green  { border-left: 3px solid #2ea043; }
+.nxp-card-red    { border-left: 3px solid #da3633; }
 
-/* ── Finding cards ── */
+/* ── Findings & Anomalies ── */
 .finding-card {
-    background: #12122a;
-    border: 1px solid #1e1e45;
-    border-radius: 8px;
-    padding: 0.9rem 1.1rem;
-    margin-bottom: 0.6rem;
-    font-size: 0.88rem;
-    color: #c8c8e0;
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: #c9d1d9;
     line-height: 1.5;
 }
 
-.finding-warn  { border-left: 3px solid #FCA600; }
-.finding-fail  { border-left: 3px solid #ef4444; }
-.finding-info  { border-left: 3px solid #0EAFE0; }
+.finding-warn { border-left: 3px solid #ea7600; }
+.finding-fail { border-left: 3px solid #da3633; }
+.finding-info { border-left: 3px solid #0096d6; }
 
-/* ── Status badges ── */
+/* ── Status Badges ── */
 .badge {
     display: inline-block;
-    padding: 0.2rem 0.65rem;
-    border-radius: 999px;
-    font-size: 0.72rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.05em;
-}
-.badge-pass    { background: #69CA0020; color: #69CA00; border: 1px solid #69CA0060; }
-.badge-warn    { background: #FCA60020; color: #FCA600; border: 1px solid #FCA60060; }
-.badge-fail    { background: #ef444420; color: #ef4444; border: 1px solid #ef444460; }
-.badge-synth   { background: #0EAFE020; color: #0EAFE0; border: 1px solid #0EAFE060; }
-.badge-upload  { background: #69CA0020; color: #69CA00; border: 1px solid #69CA0060; }
-
-/* ── Page title ── */
-.page-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #f0f0ff;
-    margin-bottom: 0.2rem;
+    letter-spacing: 0.04em;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 
-.page-subtitle {
-    font-size: 0.85rem;
-    color: #6666aa;
-    margin-bottom: 1.5rem;
+.badge-pass { background: #2ea04318; color: #3fb950; border: 1px solid #2ea04340; }
+.badge-warn { background: #ea760018; color: #f0883e; border: 1px solid #ea760040; }
+.badge-fail { background: #da363318; color: #f85149; border: 1px solid #da363340; }
+.badge-info { background: #0096d618; color: #58a6ff; border: 1px solid #0096d640; }
+
+/* ── Diagnostic Report Styling (Replaces Chat Bubbles) ── */
+.diagnostic-report {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 4px;
+    padding: 1.2rem 1.4rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
-/* ── Section header ── */
-.section-header {
-    font-size: 0.72rem;
+.diagnostic-header {
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #6666aa;
-    margin-bottom: 0.8rem;
+    letter-spacing: 0.05em;
+    color: #8b949e;
+    margin-bottom: 0.75rem;
     padding-bottom: 0.4rem;
-    border-bottom: 1px solid #1e1e45;
+    border-bottom: 1px solid #21262d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #0a0a14; }
-::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #FCA600; }
-
-/* ── Sidebar title ── */
-.sidebar-logo-text {
-    font-size: 1.3rem;
-    font-weight: 800;
-    letter-spacing: 0.03em;
-}
-
-.sidebar-logo-n { color: #FCA600; }
-.sidebar-logo-x { color: #0EAFE0; }
-.sidebar-logo-p { color: #69CA00; }
-
-/* ── Chat / AI panel ── */
-.chat-bubble-user {
-    background: #1a1a35;
-    border: 1px solid #2a2a4a;
-    border-radius: 10px 10px 2px 10px;
-    padding: 0.7rem 1rem;
-    margin-bottom: 0.5rem;
-    color: #e0e0f5;
+.diagnostic-body {
+    color: #e6edf3;
     font-size: 0.88rem;
+    line-height: 1.6;
 }
 
-.chat-bubble-ai {
-    background: #0d1a2a;
-    border: 1px solid #0EAFE030;
-    border-radius: 10px 10px 10px 2px;
-    padding: 0.7rem 1rem;
-    margin-bottom: 0.5rem;
-    color: #d0e8f5;
-    font-size: 0.88rem;
+.doc-ref-item {
+    background-color: #0d1117;
+    border: 1px solid #21262d;
+    border-radius: 3px;
+    padding: 0.65rem 0.85rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.82rem;
 }
 
 .source-chip {
     display: inline-block;
-    background: #1a1a2a;
-    border: 1px solid #2a2a4a;
-    border-radius: 4px;
-    padding: 0.1rem 0.5rem;
-    font-size: 0.72rem;
-    color: #0EAFE0;
-    margin: 0.2rem 0.2rem 0 0;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 3px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.68rem;
+    color: #58a6ff;
+    font-family: ui-monospace, SFMono-Regular, monospace;
 }
 
-/* ── Plotly chart containers ── */
-[data-testid="stPlotlyChart"] {
-    border: 1px solid #1e1e45;
-    border-radius: 8px;
-    overflow: hidden;
+/* ── Section Header ── */
+.section-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8b949e;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid #21262d;
 }
 
-/* ── Upload widget ── */
-[data-testid="stFileUploader"] {
-    background: #12122a !important;
-    border: 1px dashed #2a2a4a !important;
-    border-radius: 8px !important;
+/* ── Page Titles ── */
+.page-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #f0f6fc;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.2rem;
 }
 
-/* ── Progress / spinner ── */
-[data-testid="stSpinner"] { color: #FCA600 !important; }
+.page-subtitle {
+    font-size: 0.82rem;
+    color: #8b949e;
+    margin-bottom: 1.25rem;
+}

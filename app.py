@@ -16,22 +16,22 @@ from src.app_context import get_context
 from src.insight_generator import generate_findings, compute_overall_pass_rate, SEVERITY_ICON
 from src.specification_validator import compute_lot_parameter_matrix, validate_dataframe
 
-NXP_ORANGE  = "#FCA600"
-NXP_BLUE    = "#0EAFE0"
-NXP_GREEN   = "#69CA00"
-NXP_RED     = "#ef4444"
-PLOT_BG     = "#0d0d1e"
-GRID_COLOR  = "#1e1e35"
+NXP_ORANGE  = "#ea7600"
+NXP_BLUE    = "#0096d6"
+NXP_GREEN   = "#2ea043"
+NXP_RED     = "#da3633"
+PLOT_BG     = "#161b22"
+GRID_COLOR  = "#21262d"
 
 
 def _plotly_theme() -> dict:
     return dict(
         paper_bgcolor=PLOT_BG,
         plot_bgcolor=PLOT_BG,
-        font=dict(color="#c8c8e0", family="Inter, Segoe UI, sans-serif", size=12),
+        font=dict(color="#c9d1d9", family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", size=11),
         xaxis=dict(gridcolor=GRID_COLOR, linecolor=GRID_COLOR, zerolinecolor=GRID_COLOR),
         yaxis=dict(gridcolor=GRID_COLOR, linecolor=GRID_COLOR, zerolinecolor=GRID_COLOR),
-        margin=dict(l=40, r=20, t=40, b=40),
+        margin=dict(l=40, r=20, t=35, b=35),
     )
 
 
@@ -40,15 +40,20 @@ def main():
 
     # ── Header ───────────────────────────────────────────────────
     st.markdown("""
-        <div style="margin-bottom:0.4rem;">
-            <span style="font-size:2.2rem;font-weight:800;letter-spacing:0.02em;">
-                <span style="color:#FCA600;">N</span><span style="color:#0EAFE0;">X</span><span style="color:#69CA00;">P</span>
-                <span style="color:#f0f0ff;"> NFC Characterization Workbench</span>
-            </span>
+        <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #30363d;padding-bottom:0.75rem;margin-bottom:1.25rem;">
+            <div>
+                <div style="display:flex;align-items:center;gap:0.6rem;">
+                    <span style="font-size:1.35rem;font-weight:700;letter-spacing:-0.01em;color:#f0f6fc;">NFC Characterization Analytics Platform</span>
+                    <span style="background:#21262d;color:#8b949e;font-size:0.68rem;padding:0.15rem 0.45rem;border-radius:3px;font-family:ui-monospace,SFMono-Regular,monospace;border:1px solid #30363d;">PL-STI / PE-LAB</span>
+                </div>
+                <div style="color:#8b949e;font-size:0.8rem;margin-top:0.2rem;">
+                    Automated Contactless IC Parametric Characterization &amp; Specification Verification Engine
+                </div>
+            </div>
+            <div style="text-align:right;font-family:ui-monospace,SFMono-Regular,monospace;font-size:0.72rem;color:#8b949e;">
+                <span style="color:#2ea043;">● SYSTEM READY</span> | 13.56 MHz NFC
+            </div>
         </div>
-        <p style="color:#8888aa;font-size:0.92rem;margin-top:0;margin-bottom:1.4rem;">
-            Automated Semiconductor Characterization &amp; Statistical Analysis
-        </p>
     """, unsafe_allow_html=True)
 
     # ── KPI Cards ────────────────────────────────────────────────
@@ -61,7 +66,7 @@ def main():
     with c1:
         st.metric("Total Measurements", f"{total_measurements:,}")
     with c2:
-        st.metric("Chips Tested", f"{n_chips:,}")
+        st.metric("Tested Dies", f"{n_chips:,}")
     with c3:
         st.metric("Production Lots", f"{n_lots}")
     with c4:
@@ -69,15 +74,15 @@ def main():
         st.metric(
             "Overall Pass Rate",
             f"{pass_rate*100:.2f}%",
-            delta=f"{'✓ All within spec' if pass_rate == 1.0 else f'{(1-pass_rate)*100:.2f}% failing'}",
+            delta=f"{'All lots compliant' if pass_rate == 1.0 else f'{(1-pass_rate)*100:.2f}% out of spec'}",
         )
 
-    st.markdown("<hr style='border-color:#1e1e35;margin:1.3rem 0 1rem 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:#30363d;margin:1.1rem 0;'>", unsafe_allow_html=True)
 
     # ── Unified Tabs: Dashboard vs Methodology ───────────────────
     tab_overview, tab_methodology = st.tabs([
-        "📊 Overview Dashboard",
-        "📖 Engineering Methodology & Architecture",
+        "Parametric Overview",
+        "Technical Architecture & Pipeline",
     ])
 
     with tab_overview:
@@ -107,7 +112,7 @@ def _render_dashboard(df: pl.DataFrame, specs: dict):
         if sel_param:
             _render_param_hist(df, sel_param, specs)
 
-    st.markdown("<hr style='border-color:#1e1e35;margin:1.5rem 0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:#30363d;margin:1.5rem 0;'>", unsafe_allow_html=True)
 
     # Findings
     st.markdown("<div class='section-header'>Automated Engineering Findings</div>", unsafe_allow_html=True)
@@ -116,22 +121,32 @@ def _render_dashboard(df: pl.DataFrame, specs: dict):
         findings = generate_findings(df, specs)
 
     if not findings:
-        st.success("✅ No anomalies detected. All parameters appear within specification and no bimodal signals found.")
+        st.info("No parametric anomalies flagged. All distributions unimodal and compliant with specification limits.")
     else:
         for f in findings[:8]:
-            icon = SEVERITY_ICON.get(f.severity, "•")
             border = {
                 "fail":    "finding-card finding-fail",
                 "warning": "finding-card finding-warn",
                 "info":    "finding-card finding-info",
             }.get(f.severity, "finding-card finding-info")
 
+            badge_html = {
+                "fail":    "<span class='badge badge-fail'>CRITICAL</span>",
+                "warning": "<span class='badge badge-warn'>ANOMALY</span>",
+                "info":    "<span class='badge badge-info'>ADVISORY</span>",
+            }.get(f.severity, "<span class='badge badge-info'>INFO</span>")
+
             st.markdown(
                 f"""<div class="{border}">
-                    <strong>{icon} {f.headline}</strong><br>
-                    <span style="color:#9999bb;font-size:0.84rem;">{f.detail}</span>
-                    <br><span style="color:#FCA600;font-size:0.75rem;margin-top:0.3rem;display:inline-block;">
-                    → Investigate in: {f.page_link}</span>
+                    <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.25rem;">
+                        {badge_html}
+                        <strong style="color:#f0f6fc;font-size:0.88rem;">{f.headline}</strong>
+                    </div>
+                    <span style="color:#8b949e;font-size:0.82rem;">{f.detail}</span>
+                    <div style="margin-top:0.35rem;">
+                        <span style="color:#58a6ff;font-size:0.75rem;font-family:ui-monospace,SFMono-Regular,monospace;">
+                        Target Module: {f.page_link}</span>
+                    </div>
                 </div>""",
                 unsafe_allow_html=True,
             )
@@ -208,7 +223,7 @@ def _render_param_hist(df: pl.DataFrame, param: str, specs: dict):
         x=vals,
         nbinsx=40,
         marker_color=NXP_BLUE,
-        marker_line_color="#0a0a14",
+        marker_line_color="#161b22",
         marker_line_width=0.5,
         opacity=0.85,
         hovertemplate="Value: %{x}<br>Count: %{y}<extra></extra>",
@@ -375,10 +390,10 @@ Technical Documentation (*.txt) ──► BM25 Retrieval ──► Google Gemini
 1. **Overview & Findings (25s)**: Point to the KPI cards and the production lot pass rate chart. Note that `LOT-C` shows a systematic degradation on Receiver Sensitivity, and `LOT-D` triggers an automated finding for a bimodal distribution in Load Modulation.
 2. **Data Explorer (20s)**: Filter across temperature/voltage corners, show the data cleaning pipeline audit (duplicate and null tracking), and demonstrate the CSV export.
 3. **Statistical Analysis & GMM (25s)**: Select `load_modulation_mv` and `LOT-D`. Switch to the **Multimodal** tab to show the two distinct bell curves fitted by the Gaussian Mixture Model ($\Delta\text{BIC} = 104.3$).
-4. **AI Investigation (20s)**: Ask: *"What could cause a bimodal distribution in load modulation?"* Show the Gemini-generated explanation grounded in the retrieved documentation with cited sources.
+4. **Technical Diagnostics (20s)**: Submit an inquiry such as *"What could cause a bimodal distribution in load modulation?"* Show the grounded diagnostic report cross-referencing technical standards.
         """
     )
-    st.markdown("<hr style='border-color:#1e1e35;margin:2rem 0 1rem;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:#30363d;margin:2rem 0 1rem;'>", unsafe_allow_html=True)
     st.caption("All datasets, test records, and reference documents in this workbench are synthetic.")
 
 

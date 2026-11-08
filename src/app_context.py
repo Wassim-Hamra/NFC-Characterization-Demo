@@ -43,8 +43,7 @@ def get_context():
     """
     try:
         st.set_page_config(
-            page_title="NFC Characterization Workbench",
-            page_icon="🔬",
+            page_title="NFC Characterization Analytics Workbench",
             layout="wide",
             initial_sidebar_state="expanded",
         )
@@ -73,18 +72,21 @@ def get_context():
     return df, specs
 
 def render_sidebar(df: pl.DataFrame):
-    """Render clean, minimalist NXP sidebar branding."""
+    """Render clean, industrial NXP sidebar branding."""
     with st.sidebar:
         # NXP Logo
         logo_b64 = _svg_to_b64("assets/nxp_logo.svg")
         if logo_b64:
             st.markdown(
-                f'<img src="data:image/svg+xml;base64,{logo_b64}" style="width:125px;margin-bottom:0.4rem;">',
+                f'<img src="data:image/svg+xml;base64,{logo_b64}" style="width:115px;margin-bottom:0.6rem;">',
                 unsafe_allow_html=True,
             )
         st.markdown(
-            """<div style="font-size:0.75rem;font-weight:600;color:#c0c0e0;margin-bottom:1.2rem;letter-spacing:0.02em;">
-            NFC Characterization Workbench
+            """<div style="font-size:0.75rem;font-weight:700;color:#f0f6fc;letter-spacing:0.02em;margin-bottom:0.15rem;">
+            PL-STI Product Engineering
+            </div>
+            <div style="font-size:0.68rem;color:#8b949e;font-family:ui-monospace,SFMono-Regular,monospace;margin-bottom:1.2rem;">
+            NFC Characterization Lab
             </div>""",
             unsafe_allow_html=True,
         )

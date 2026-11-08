@@ -14,13 +14,13 @@ NXP_GREEN  = "#69CA00"
 
 
 def render(df: pl.DataFrame, specs: dict):
-    st.markdown("<div class='page-title'>Data Explorer</div>", unsafe_allow_html=True)
+    st.markdown("<div class='page-title'>Parametric Data Explorer</div>", unsafe_allow_html=True)
     st.markdown(
-        "<div class='page-subtitle'>Browse, filter, and prepare characterization data</div>",
+        "<div class='page-subtitle'>Vectorized record inspection, corner-condition filtering, and ingestion pipeline audit</div>",
         unsafe_allow_html=True,
     )
 
-    tab_browse, tab_prep = st.tabs(["📋 Browse & Filter", "🔧 Data Preparation"])
+    tab_browse, tab_prep = st.tabs(["Parametric Records", "Data Preparation Pipeline Audit"])
 
     with tab_browse:
         _render_browse(df)
@@ -43,7 +43,7 @@ def _render_browse(df: pl.DataFrame):
         n_lots = df["lot_id"].n_unique() if "lot_id" in df.columns else 0
         st.metric("Lots", n_lots)
 
-    st.markdown("<hr style='border-color:#1e1e35;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='border-color:#30363d;'>", unsafe_allow_html=True)
 
     # ── Filters ──────────────────────────────────────────────────
     st.markdown("<div class='section-header'>Filters</div>", unsafe_allow_html=True)
@@ -108,7 +108,7 @@ def _render_browse(df: pl.DataFrame):
     # Download
     csv_bytes = filtered.write_csv().encode("utf-8")
     st.download_button(
-        "⬇ Download filtered dataset (CSV)",
+        "Export Filtered Records (CSV)",
         data=csv_bytes,
         file_name="nfc_filtered_data.csv",
         mime="text/csv",
@@ -171,38 +171,38 @@ def _render_preparation(df: pl.DataFrame):
                 unsafe_allow_html=True)
 
     steps = [
-        ("Column name standardisation", f"Columns renamed: {report.columns_renamed or 'None'}",
-         "✅" if not report.columns_renamed else "ℹ️"),
-        ("Expected column check",
+        ("Column Name Standardisation", f"Renamed: {report.columns_renamed or 'None'}",
+         "PASS" if not report.columns_renamed else "INFO"),
+        ("Schema Conformance Check",
          f"Missing: {', '.join(report.missing_columns) if report.missing_columns else 'None'}",
-         "✅" if not report.missing_columns else "⚠️"),
-        ("Type casting (numeric columns)",
+         "PASS" if not report.missing_columns else "WARN"),
+        ("Numeric Type Casting",
          f"Cast errors: {report.n_type_cast_errors}",
-         "✅" if report.n_type_cast_errors == 0 else "⚠️"),
-        ("Duplicate record removal",
-         f"{report.n_duplicates_removed} duplicate rows removed",
-         "✅" if report.n_duplicates_removed == 0 else "ℹ️"),
-        ("Null measured_value handling",
+         "PASS" if report.n_type_cast_errors == 0 else "WARN"),
+        ("Deduplication Audit",
+         f"{report.n_duplicates_removed} duplicate rows purged",
+         "PASS" if report.n_duplicates_removed == 0 else "PURGED"),
+        ("Null Measurement Filter",
          f"{report.n_null_measured_value} null rows removed",
-         "✅" if report.n_null_measured_value == 0 else "⚠️"),
-        ("Infinite value removal",
-         f"{report.n_inf_flagged} rows with ±Inf removed",
-         "✅" if report.n_inf_flagged == 0 else "⚠️"),
-        ("Extreme outlier flagging (>10σ)",
-         f"{report.n_out_of_range_flagged} extreme outliers removed",
-         "✅" if report.n_out_of_range_flagged == 0 else "ℹ️"),
+         "PASS" if report.n_null_measured_value == 0 else "PURGED"),
+        ("Infinite Value Removal",
+         f"{report.n_inf_flagged} non-finite float rows removed",
+         "PASS" if report.n_inf_flagged == 0 else "PURGED"),
+        ("Statistical Outlier Purge (>10σ)",
+         f"{report.n_out_of_range_flagged} extreme test artifacts purged",
+         "PASS" if report.n_out_of_range_flagged == 0 else "PURGED"),
     ]
 
     import pandas as pd
-    step_df = pd.DataFrame(steps, columns=["Step", "Result", "Status"])
+    step_df = pd.DataFrame(steps, columns=["Pipeline Gate", "Audit Detail", "Gate Status"])
     st.dataframe(step_df, use_container_width=True, hide_index=True)
 
     if report.warnings:
-        with st.expander("⚠️ Pipeline warnings"):
+        with st.expander("Pipeline Warnings & Alerts"):
             for w in report.warnings:
                 st.warning(w)
     else:
-        st.success("No warnings. Dataset passed all preparation checks.")
+        st.info("Pipeline audit completed: Clean dataset validated for downstream parametric analysis.")
 
     # Duplicate check detail
     with st.expander("Duplicate record analysis"):

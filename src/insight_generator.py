@@ -23,9 +23,9 @@ class Finding:
 
 
 SEVERITY_ICON = {
-    "info":    "ℹ️",
-    "warning": "⚠️",
-    "fail":    "🔴",
+    "info":    "[INFO]",
+    "warning": "[ANOMALY]",
+    "fail":    "[CRITICAL]",
 }
 
 
